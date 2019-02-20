@@ -22,7 +22,7 @@ clock = pygame.time.Clock()
 # Initialize the joysticks
 pygame.joystick.init()
 
-#default values of robot not moving anyway
+# default values of robot not moving anyway
 speed = 74
 turn = 56
 joystick_values = []
@@ -79,16 +79,16 @@ while done == False:
             speed = int((-100) * joystick_values[1])
             if speed == 100:
                 speed -= 1
-            elif 0 < speed < 10:
-                speed = 10
+            # elif 0 < speed < 10:
+            #    speed = 10
 
         elif joystick_values[1] > 0:
             direction = 'R'
             speed = int(100 * joystick_values[1])
             if speed == 100:
                 speed -= 1
-            elif 0 < speed < 10:
-                speed = 10
+            # elif 0 < speed < 10:
+            #    speed = 10
         else:
             print('***Error: Unknown speed joystick value!***')
 
@@ -114,18 +114,18 @@ while done == False:
 
         # Create string variables for speed to be sent to robot
         if direction == 'R':
-            if speed == 0:
-                message_speed = 'sr00'
-                message_speed_byte = b'sr00'
+            if 0 <= speed < 10:
+                message_speed = str('sr0' + str(speed))
+                message_speed_byte = str.encode(message_speed)
             else:
                 message_speed = str('sr' + str(speed))
                 message_speed_byte = str.encode(message_speed)
             if loop_counter % divider == 0:
                 ser.write(message_speed_byte)
         elif direction == 'F':
-            if speed == 0:
-                message_speed = 'sf00'
-                message_speed_byte = b'sf00'
+            if 0 < speed < 10:
+                message_speed = str('sf0' + str(speed))
+                message_speed_byte = str.encode(message_speed)
             else:
                 message_speed = str('sf' + str(speed))
                 message_speed_byte = str.encode(message_speed)
