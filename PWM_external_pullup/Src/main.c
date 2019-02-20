@@ -106,11 +106,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 	
 	if(servo == 'S' || servo == 's') { //jezeli chcemy sterowac predkoscia [S]peed
 		if( direction == 'F' || direction == 'f'){    //jazda do przodu [F]orward
-			TIM4->CCR3 = (int)(74 - (34 * speed/100)); //zadajemy predkosc proporcjonalna do zadanej wahadla bez blokady
+			TIM4->CCR3 = (int)(740 - (340 * speed/100)); //zadajemy predkosc proporcjonalna do zadanej wahadla bez blokady
 			size = sprintf(send_data, "Wlazl w ifa z 'xD', a wartosc CCR3 to '%d'.\n\r", TIM4->CCR3);
 		}
 		else if(direction == 'R' || direction == 'r') {      //jazda do tylu [R]everse
-			TIM4->CCR3 = (int)(74 + (34 * speed/100)); //zadajemy predkosc proporcjonalna do zadanej wahadla bez blokady
+			TIM4->CCR3 = (int)(740 + (340 * speed/100)); //zadajemy predkosc proporcjonalna do zadanej wahadla bez blokady
 			size = sprintf(send_data, "Wlazl w ifa z 'SR', a wartosc speed to '%d'\n\r", TIM4->CCR3);
 		}
 		else{		// znaki inne niz przewidziane
@@ -119,11 +119,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 	}
 	else if(servo == 'T' || servo == 't'){        // jezeli chcemy skrecac [T]urn
 		if(direction == 'R' || direction == 'r'){   // skrecamy w prawo [R]ight
-			TIM2->CCR2 = (int)(56 - (24 * speed/100));
+			TIM2->CCR2 = (int)(56 - (30 * speed/100));
 			size = sprintf(send_data, "Wlazl w ifa z 'TR', a wartosc CCR2 to '%d'\n\r", TIM2->CCR2);
 		}
 		else if(direction == 'L' || direction == 'l') {    //skrecamy w lewo [L]eft
-			TIM2->CCR2 = (int)(56 + (24 * speed/100));
+			TIM2->CCR2 = (int)(56 + (30 * speed/100));
 			size = sprintf(send_data, "Wlazl w ifa z 'TL', a wartosc CCR2 to '%d'.\n\r", TIM2->CCR2);
 		}
 		else{   // znaki inne niz przewidziane
@@ -238,7 +238,7 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
 	HAL_TIM_Base_Start_IT(&htim11);
 	HAL_UART_Receive_IT(&huart1, received_data, 4); //odbieramy 4 znaki z uart1 i zapisujemy do received_data
-	TIM4->CCR3 = 74; 		// Servo bez blokady: 40-0.8ms, 50-1.0ms, 80-1.6ms, 100-2.0ms, 110-2.2ms  74- STOP
+	TIM4->CCR3 = 740; 		// Servo bez blokady: 40-0.8ms, 50-1.0ms, 80-1.6ms, 100-2.0ms, 110-2.2ms  74- STOP
 	TIM2->CCR2 = 56; // Servo z blokada: 20-0.4ms, 130-2.6ms  32- lewe skrajne, 56-srodek, 80-prawe skrajne
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);
 
@@ -430,9 +430,9 @@ static void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 1 */
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 1679;
+  htim4.Init.Prescaler = 167;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 999;
+  htim4.Init.Period = 9999;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
   {
